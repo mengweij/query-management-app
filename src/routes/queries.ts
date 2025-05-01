@@ -74,6 +74,27 @@ async function queriesRoutes(app: FastifyInstance) {
       }
     },
   })
+
+  app.delete<{
+    Params: { id: string }
+  }>('/:id', {
+    async handler(req, reply) {
+      log.debug('delete query')
+      try {
+        await prisma.query.delete({
+          where: { id: req.params.id },
+        })
+        reply.send({ message: 'Query deleted successfully' })
+      } catch (err: any) {
+        log.error({ err }, err.message)
+        // P2025 is the Prisma error code for not found
+        if (err.code === 'P2025') {
+          throw new ApiError('query not found', 404)
+        }
+        throw new ApiError('failed to delete query', 400)
+      }
+    },
+  })
 }
 
 export default queriesRoutes
