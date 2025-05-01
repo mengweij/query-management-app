@@ -1,6 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -11,23 +8,23 @@ datasource db {
 }
 
 model FormData {
-  id        String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  question  String
-  answer    String
-  query     Query?
+  id       String @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  question String
+  answer   String
+  query    Query?
 
   @@map("form_data")
 }
 
 model Query {
-  id          String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  id          String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   title       String
   description String?
-  createdAt   DateTime  @default(now()) @map("created_at")
-  updatedAt   DateTime  @updatedAt @map("updated_at")
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
   status      Status
-  formData    FormData  @relation(fields: [formDataId], references: [id])
-  formDataId  String    @unique @map("form_data_id") @db.Uuid
+  formDataId  String   @unique @map("form_data_id") @db.Uuid
+  formData    FormData @relation(fields: [formDataId], references: [id])
 
   @@map("queries")
 }
