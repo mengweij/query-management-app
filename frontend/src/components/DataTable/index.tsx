@@ -1,13 +1,19 @@
 'use client'
 
 import { Table } from '@mantine/core'
+import { useState } from 'react'
+
 import QueryCell from './queryCell'
+import CreateQueryModal from '../QueryModal/CreateQueryModal'
 import mockData from '../mockData'
 
 export default function DataTable() {
+    const [createQueryModal, setCreateQueryModal] = useState(false);
+    const [currentQuestion, setCurrentQuestion] = useState('');
+
     const handleCreateQuery = (row: any) => {
-        // TODO: replace with modal component
-        alert(`Create Query for ${row.question}`);
+        setCurrentQuestion(row.question);
+        setCreateQueryModal(true);
     }
 
     const handleViewQuery = (row: any) => {
@@ -15,30 +21,44 @@ export default function DataTable() {
         alert(`View Query for ${row.question}`);
     }
 
+    const handleSubmit = (description: string) => {
+        // TODO: replace with API call
+        alert(`Submitted query for ${currentQuestion}: ${description}`);
+        setCreateQueryModal(false);
+    }
+
     return (
-        <Table highlightOnHover withTableBorder>
-      <Table.Thead>
-        <Table.Tr>
-          <Table.Th>Question</Table.Th>
-          <Table.Th>Answer</Table.Th>
-          <Table.Th>Queries</Table.Th>
-        </Table.Tr>
-      </Table.Thead>
-      <Table.Tbody>
-        {mockData.map((row) => (
-          <Table.Tr key={row.id}>
-            <Table.Td>{row.question}</Table.Td>
-            <Table.Td>{row.answer}</Table.Td>
-            <Table.Td>
-              <QueryCell
-                status={row.query ? (row.query.status as 'OPEN' | 'RESOLVED') : null}
-                onCreateQuery={() => handleCreateQuery(row)}
-                onViewQuery={() => handleViewQuery(row)}
-              />
-            </Table.Td>
-          </Table.Tr>
-        ))}
-            </Table.Tbody>
-        </Table>
+        <>
+            <Table highlightOnHover withTableBorder>
+                <Table.Thead>
+                    <Table.Tr>
+                        <Table.Th>Question</Table.Th>
+                        <Table.Th>Answer</Table.Th>
+                        <Table.Th>Queries</Table.Th>
+                    </Table.Tr>
+                </Table.Thead>
+                <Table.Tbody>
+                    {mockData.map((row) => (
+                        <Table.Tr key={row.id}>
+                            <Table.Td>{row.question}</Table.Td>
+                            <Table.Td>{row.answer}</Table.Td>
+                            <Table.Td>
+                                <QueryCell
+                                    status={row.query ? (row.query.status as 'OPEN' | 'RESOLVED') : null}
+                                    onCreateQuery={() => handleCreateQuery(row)}
+                                    onViewQuery={() => handleViewQuery(row)}
+                                />
+                            </Table.Td>
+                        </Table.Tr>
+                    ))}
+                </Table.Tbody>
+            </Table>
+            <CreateQueryModal
+                opened={createQueryModal}
+                onClose={() => setCreateQueryModal(false)}
+                question={currentQuestion}
+                onSubmit={handleSubmit}
+            />
+        </>
     )
 }
