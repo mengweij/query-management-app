@@ -1,9 +1,20 @@
 'use client'
 
 import { Table } from '@mantine/core'
+import QueryCell from './queryCell'
 import mockData from '../mockData'
 
 export default function DataTable() {
+    const handleCreateQuery = (row: any) => {
+        // TODO: replace with modal component
+        alert(`Create Query for ${row.question}`);
+    }
+
+    const handleViewQuery = (row: any) => {
+        // TODO: replace with modal component
+        alert(`View Query for ${row.question}`);
+    }
+
     return (
         <Table highlightOnHover withTableBorder>
       <Table.Thead>
@@ -19,8 +30,11 @@ export default function DataTable() {
             <Table.Td>{row.question}</Table.Td>
             <Table.Td>{row.answer}</Table.Td>
             <Table.Td>
-              {/* TODO: modify this after integrating query component */}
-              {row.query ? row.query.status : ''}
+              <QueryCell
+                status={row.query ? (row.query.status as 'OPEN' | 'RESOLVED') : null}
+                onCreateQuery={() => handleCreateQuery(row)}
+                onViewQuery={() => handleViewQuery(row)}
+              />
             </Table.Td>
           </Table.Tr>
         ))}
