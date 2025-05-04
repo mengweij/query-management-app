@@ -1,6 +1,6 @@
 'use client'
 
-import { Table, Pagination } from '@mantine/core'
+import { Table } from '@mantine/core'
 import { useEffect, useState } from 'react'
 import { notifications } from '@mantine/notifications'
 import { IconX, IconCheck } from '@tabler/icons-react'

@@ -1,23 +1,33 @@
-import { Container, Title, Box, Text, Paper, Center } from '@mantine/core'
+'use client'
+
+import {
+  Title,
+  Text,
+  Paper,
+  Center,
+  AppShell,
+} from '@mantine/core'
 import DataTable from '../components/DataTable'
 
 export default function Home() {
   return (
-    <Container fluid mt="md" mb="xl">
-      <Center mb="xl">
-        <Box>
-          <Title order={1} mt="xs" mb="xs">
+    <AppShell header={{ height: '120' }} padding="md" bg={'#f8f9fa'}>
+      <AppShell.Header>
+        <Center>
+          <Title order={1} mt="xl" mb="xs">
             Query Management System
           </Title>
-          <Text c="dimmed" mt="md" mb="md" ta={'center'}>
-            Manage and track all queries in one place.
-          </Text>
-        </Box>
-      </Center>
+        </Center>
+        <Text c="dimmed" mb="md" ta={'center'}>
+          Manage and track all queries in one place.
+        </Text>
+      </AppShell.Header>
 
-      <Paper shadow="sm" p="md" radius="md">
-        <DataTable />
-      </Paper>
-    </Container>
+      <AppShell.Main>
+        <Paper shadow="sm" p="md" radius="md">
+          <DataTable />
+        </Paper>
+      </AppShell.Main>
+    </AppShell>
   )
 }
