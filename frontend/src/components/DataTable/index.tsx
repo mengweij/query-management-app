@@ -14,7 +14,7 @@ export default function DataTable() {
   const [loading, setLoading] = useState(true)
   const [hoveredRowId, setHoveredRowId] = useState<string | null>(null)
   const [createQueryModal, setCreateQueryModal] = useState(false)
-  const [currentQuestion, setCurrentQuestion] = useState('')
+  const [currentFormData, setCurrentFormData] = useState<FormData | null>(null)
   const [viewQueryModal, setViewQueryModal] = useState(false)
   const [currentQuery, setCurrentQuery] = useState<any>(null)
 
@@ -28,7 +28,7 @@ export default function DataTable() {
       const response = await apiService.formData.getAll()
       if (response.statusCode !== 200) {
         console.error('Error fetching form data:', response.message)
-        return;
+        return
       }
       const { formData } = response.data
       setFormData(formData)
@@ -40,18 +40,37 @@ export default function DataTable() {
   }
 
   const handleCreateQuery = (row: FormData) => {
-    setCurrentQuestion(row.question)
+    setCurrentFormData(row)
     setCreateQueryModal(true)
   }
 
-  const handleSubmit = (description: string) => {
-    // TODO: replace with API call
-    alert(`Submitted query for ${currentQuestion}: ${description}`)
-    setCreateQueryModal(false)
+  const handleSubmit = async (description: string) => {
+    if (!currentFormData) {
+      console.error('No current form data to create a query for')
+      return
+    }
+
+    try {
+      await apiService.query.create({
+        title: currentFormData.question,
+        description,
+        formDataId: currentFormData.id,
+      })
+
+      alert(`Created query for ${currentFormData?.question}`)
+
+      await fetchFormData()
+    } catch (error) {
+      console.error('Error creating query:', error)
+      alert('Error creating query')
+    } finally {
+      setCreateQueryModal(false)
+      setCurrentFormData(null)
+    }
   }
 
   const handleViewQuery = (row: FormData) => {
-    setCurrentQuestion(row.question)
+    setCurrentFormData(row)
     if (row.query) {
       setCurrentQuery({
         status: row.query.status,
@@ -86,9 +105,9 @@ export default function DataTable() {
         </Table.Thead>
         <Table.Tbody>
           {formData.map(row => (
-            <Table.Tr 
-              key={row.id} 
-              onMouseEnter={() => setHoveredRowId(row.id)} 
+            <Table.Tr
+              key={row.id}
+              onMouseEnter={() => setHoveredRowId(row.id)}
               onMouseLeave={() => setHoveredRowId(null)}
             >
               <Table.Td>{row.question}</Table.Td>
@@ -111,9 +130,9 @@ export default function DataTable() {
         opened={createQueryModal}
         onClose={() => {
           setCreateQueryModal(false)
-          setCurrentQuestion('')
+          setCurrentFormData(null)
         }}
-        question={currentQuestion}
+        question={currentFormData?.question || ''}
         onSubmit={handleSubmit}
       />
       <ViewQueryModal
@@ -121,9 +140,9 @@ export default function DataTable() {
         onClose={() => {
           setViewQueryModal(false)
           setCurrentQuery(null)
-          setCurrentQuestion('')
+          setCurrentFormData(null)
         }}
-        question={currentQuestion}
+        question={currentFormData?.question || ''}
         status={currentQuery?.status}
         description={currentQuery?.description}
         createdAt={currentQuery?.createdAt}
