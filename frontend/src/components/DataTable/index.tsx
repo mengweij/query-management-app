@@ -1,18 +1,38 @@
 'use client'
 
 import { Table } from '@mantine/core'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
 import QueryCell from './queryCell'
 import CreateQueryModal from '../QueryModal/CreateQueryModal'
 import ViewQueryModal from '../QueryModal/ViewQueryModal'
-import mockData from '../mockData'
+import apiService from '../../services/api.service'
+import { FormData } from '../../types/form_data'
 
 export default function DataTable() {
+  const [formData, setFormData] = useState<FormData[]>([])
+  const [loading, setLoading] = useState(true)
   const [createQueryModal, setCreateQueryModal] = useState(false)
   const [currentQuestion, setCurrentQuestion] = useState('')
   const [viewQueryModal, setViewQueryModal] = useState(false)
   const [currentQuery, setCurrentQuery] = useState<any>(null)
+
+  useEffect(() => {
+    fetchFormData()
+  }, [])
+
+  const fetchFormData = async () => {
+    try {
+      setLoading(true)
+      const response = await apiService.formData.getAll()
+      console.log('Form data response:', response)
+      setFormData(response.data.formData)
+    } catch (error) {
+      console.error('Error fetching form data:', error)
+    } finally {
+      setLoading(false)
+    }
+  }
 
   const handleCreateQuery = (row: any) => {
     setCurrentQuestion(row.question)
@@ -45,6 +65,10 @@ export default function DataTable() {
     setCurrentQuery(null)
   }
 
+  if (loading) {
+    return <div>Loading...</div>
+  }
+
   return (
     <>
       <Table highlightOnHover withTableBorder>
@@ -56,7 +80,7 @@ export default function DataTable() {
           </Table.Tr>
         </Table.Thead>
         <Table.Tbody>
-          {mockData.map(row => (
+          {formData.map(row => (
             <Table.Tr key={row.id}>
               <Table.Td>{row.question}</Table.Td>
               <Table.Td>{row.answer}</Table.Td>

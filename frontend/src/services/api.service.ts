@@ -1,6 +1,6 @@
 import api from './api'
 import { Query, CreateQueryDto } from '../types/query'
-import { FormData } from '../types/form_data'
+import { ApiResponse, FormDataResponse } from '../types/api'
 import { isAxiosError } from 'axios'
 
 async function handleRequest<T>(request: Promise<any>): Promise<T> {
@@ -17,7 +17,8 @@ async function handleRequest<T>(request: Promise<any>): Promise<T> {
 
 export const apiService = {
   formData: {
-    getAll: () => handleRequest<FormData[]>(api.get('/form-data')),
+    getAll: () =>
+      handleRequest<ApiResponse<FormDataResponse>>(api.get('/form-data')),
   },
 
   query: {
