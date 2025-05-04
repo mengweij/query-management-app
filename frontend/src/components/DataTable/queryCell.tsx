@@ -1,6 +1,5 @@
 'use client'
 
-import { useState } from 'react'
 import { ActionIcon, Tooltip, Group, Text } from '@mantine/core'
 import { IconPlus, IconQuestionMark, IconCheck } from '@tabler/icons-react'
 
@@ -10,22 +9,20 @@ interface QueryCellProps {
   status: QueryStatus
   onCreateQuery: () => void
   onViewQuery: () => void
+  isHovered: boolean
 }
 
 export default function QueryCell({
   status,
   onCreateQuery,
   onViewQuery,
+  isHovered,
 }: QueryCellProps) {
-  const [hovered, setHovered] = useState(false)
 
   if (!status) {
     return (
-      <Group
-        onMouseEnter={() => setHovered(true)}
-        onMouseLeave={() => setHovered(false)}
-      >
-        {hovered ? (
+      <Group>
+        {isHovered ? (
           <Tooltip label="Create Query" withArrow>
             <ActionIcon
               color="gray"
@@ -48,11 +45,10 @@ export default function QueryCell({
   const isQueryOpen = status === 'OPEN'
   return (
     <Group
-      onMouseEnter={() => setHovered(true)}
-      onMouseLeave={() => setHovered(false)}
       style={{ cursor: 'pointer' }}
       onClick={onViewQuery}
     >
+      
       <Tooltip label={isQueryOpen ? 'View Query' : 'Resolved'} withArrow>
         <ActionIcon
           color={isQueryOpen ? 'red' : 'green'}

@@ -12,6 +12,7 @@ import { FormData } from '../../types/form_data'
 export default function DataTable() {
   const [formData, setFormData] = useState<FormData[]>([])
   const [loading, setLoading] = useState(true)
+  const [hoveredRowId, setHoveredRowId] = useState<string | null>(null)
   const [createQueryModal, setCreateQueryModal] = useState(false)
   const [currentQuestion, setCurrentQuestion] = useState('')
   const [viewQueryModal, setViewQueryModal] = useState(false)
@@ -85,7 +86,11 @@ export default function DataTable() {
         </Table.Thead>
         <Table.Tbody>
           {formData.map(row => (
-            <Table.Tr key={row.id}>
+            <Table.Tr 
+              key={row.id} 
+              onMouseEnter={() => setHoveredRowId(row.id)} 
+              onMouseLeave={() => setHoveredRowId(null)}
+            >
               <Table.Td>{row.question}</Table.Td>
               <Table.Td>{row.answer}</Table.Td>
               <Table.Td>
@@ -95,6 +100,7 @@ export default function DataTable() {
                   }
                   onCreateQuery={() => handleCreateQuery(row)}
                   onViewQuery={() => handleViewQuery(row)}
+                  isHovered={hoveredRowId === row.id}
                 />
               </Table.Td>
             </Table.Tr>
