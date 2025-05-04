@@ -5,7 +5,7 @@ import { isAxiosError } from 'axios'
 
 async function handleRequest<T>(request: Promise<unknown>): Promise<T> {
   try {
-    const response = await request as { data: T }
+    const response = (await request) as { data: T }
     return response.data
   } catch (error) {
     if (isAxiosError(error)) {

@@ -18,7 +18,6 @@ export default function QueryCell({
   onViewQuery,
   isHovered,
 }: QueryCellProps) {
-
   if (!status) {
     return (
       <Group>
@@ -44,11 +43,7 @@ export default function QueryCell({
 
   const isQueryOpen = status === 'OPEN'
   return (
-    <Group
-      style={{ cursor: 'pointer' }}
-      onClick={onViewQuery}
-    >
-      
+    <Group style={{ cursor: 'pointer' }} onClick={onViewQuery}>
       <Tooltip label={isQueryOpen ? 'View Query' : 'Resolved'} withArrow>
         <ActionIcon
           color={isQueryOpen ? 'red' : 'green'}
