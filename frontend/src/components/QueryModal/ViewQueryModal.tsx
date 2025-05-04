@@ -1,6 +1,30 @@
 'use client'
 
-import { Modal, Text, Button, Group, Badge, Divider, Box } from '@mantine/core'
+import {
+  Modal,
+  Text,
+  Button,
+  Group,
+  Badge,
+  Divider,
+  Box,
+  Tooltip,
+} from '@mantine/core'
+import dayjs from 'dayjs'
+import relativeTime from 'dayjs/plugin/relativeTime'
+
+dayjs.extend(relativeTime)
+
+function formatDisplayDate(date: string) {
+  if (Date.now() - new Date(date).getTime() < 7 * 24 * 60 * 60 * 1000) {
+    return dayjs(date).fromNow()
+  }
+  return formatFullDate(date)
+}
+
+function formatFullDate(date: string) {
+  return dayjs(date).format('YYYY-MM-DD HH:mm:ss')
+}
 
 interface ViewQueryModalProps {
   opened: boolean
@@ -24,6 +48,7 @@ export default function ViewQueryModal({
   onResolve,
 }: ViewQueryModalProps) {
   const isOpen = status === 'OPEN'
+  const hasUpdatedAfterCreated = updatedAt !== createdAt
 
   return (
     <Modal
@@ -46,8 +71,17 @@ export default function ViewQueryModal({
             {isOpen ? 'OPEN' : 'RESOLVED'}
           </Badge>
           <Text size="sm" c="dimmed">
-            Created: {createdAt}
-            {updatedAt && <> &nbsp;|&nbsp; Updated: {updatedAt}</>}
+            <Tooltip label={formatFullDate(createdAt)} withArrow>
+              <span>Created: {formatDisplayDate(createdAt)}</span>
+            </Tooltip>
+            {updatedAt && hasUpdatedAfterCreated && (
+              <>
+                &nbsp;|&nbsp;
+                <Tooltip label={formatFullDate(updatedAt)} withArrow>
+                  <span>Updated: {formatDisplayDate(updatedAt)}</span>
+                </Tooltip>
+              </>
+            )}
           </Text>
         </Group>
       </Box>
