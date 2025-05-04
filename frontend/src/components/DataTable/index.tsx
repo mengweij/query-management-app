@@ -1,6 +1,6 @@
 'use client'
 
-import { Table } from '@mantine/core'
+import { Table, Pagination } from '@mantine/core'
 import { useEffect, useState } from 'react'
 import { notifications } from '@mantine/notifications'
 import { IconX, IconCheck } from '@tabler/icons-react'
@@ -123,37 +123,41 @@ export default function DataTable() {
 
   return (
     <>
-      <Table highlightOnHover withTableBorder>
-        <Table.Thead>
-          <Table.Tr>
-            <Table.Th>Question</Table.Th>
-            <Table.Th>Answer</Table.Th>
-            <Table.Th>Queries</Table.Th>
-          </Table.Tr>
-        </Table.Thead>
-        <Table.Tbody>
-          {formData.map(row => (
-            <Table.Tr
-              key={row.id}
-              onMouseEnter={() => setHoveredRowId(row.id)}
-              onMouseLeave={() => setHoveredRowId(null)}
-            >
-              <Table.Td>{row.question}</Table.Td>
-              <Table.Td>{row.answer}</Table.Td>
-              <Table.Td>
-                <QueryCell
-                  status={
-                    row.query ? (row.query.status as 'OPEN' | 'RESOLVED') : null
-                  }
-                  onCreateQuery={() => handleCreateQuery(row)}
-                  onViewQuery={() => handleViewQuery(row)}
-                  isHovered={hoveredRowId === row.id}
-                />
-              </Table.Td>
+      <Table.ScrollContainer minWidth={600} maxHeight={'calc(90vh - 200px)'}>
+        <Table highlightOnHover withTableBorder stickyHeader>
+          <Table.Thead>
+            <Table.Tr>
+              <Table.Th>Question</Table.Th>
+              <Table.Th>Answer</Table.Th>
+              <Table.Th>Queries</Table.Th>
             </Table.Tr>
-          ))}
-        </Table.Tbody>
-      </Table>
+          </Table.Thead>
+          <Table.Tbody>
+            {formData.map(row => (
+              <Table.Tr
+                key={row.id}
+                onMouseEnter={() => setHoveredRowId(row.id)}
+                onMouseLeave={() => setHoveredRowId(null)}
+              >
+                <Table.Td>{row.question}</Table.Td>
+                <Table.Td>{row.answer}</Table.Td>
+                <Table.Td>
+                  <QueryCell
+                    status={
+                      row.query
+                        ? (row.query.status as 'OPEN' | 'RESOLVED')
+                        : null
+                    }
+                    onCreateQuery={() => handleCreateQuery(row)}
+                    onViewQuery={() => handleViewQuery(row)}
+                    isHovered={hoveredRowId === row.id}
+                  />
+                </Table.Td>
+              </Table.Tr>
+            ))}
+          </Table.Tbody>
+        </Table>
+      </Table.ScrollContainer>
       <CreateQueryModal
         opened={createQueryModal}
         onClose={() => {
