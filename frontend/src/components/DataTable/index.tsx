@@ -73,7 +73,10 @@ export default function DataTable() {
             </Table>
             <CreateQueryModal
                 opened={createQueryModal}
-                onClose={() => setCreateQueryModal(false)}
+                onClose={() => {
+                    setCreateQueryModal(false);
+                    setCurrentQuestion('');
+                }}
                 question={currentQuestion}
                 onSubmit={handleSubmit}
             />
@@ -82,6 +85,7 @@ export default function DataTable() {
                 onClose={() => {
                     setViewQueryModal(false);
                     setCurrentQuery(null);
+                    setCurrentQuestion('');
                 }}
                 question={currentQuestion}
                 status={currentQuery?.status}
