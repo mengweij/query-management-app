@@ -3,9 +3,9 @@ import { Query, CreateQueryDto } from '../types/query'
 import { ApiResponse, FormDataResponse } from '../types/api'
 import { isAxiosError } from 'axios'
 
-async function handleRequest<T>(request: Promise<any>): Promise<T> {
+async function handleRequest<T>(request: Promise<unknown>): Promise<T> {
   try {
-    const response = await request
+    const response = await request as { data: T }
     return response.data
   } catch (error) {
     if (isAxiosError(error)) {

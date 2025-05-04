@@ -25,8 +25,12 @@ export default function DataTable() {
     try {
       setLoading(true)
       const response = await apiService.formData.getAll()
-      console.log('Form data response:', response)
-      setFormData(response.data.formData)
+      if (response.statusCode !== 200) {
+        console.error('Error fetching form data:', response.message)
+        return;
+      }
+      const { formData } = response.data
+      setFormData(formData)
     } catch (error) {
       console.error('Error fetching form data:', error)
     } finally {
@@ -34,7 +38,7 @@ export default function DataTable() {
     }
   }
 
-  const handleCreateQuery = (row: any) => {
+  const handleCreateQuery = (row: FormData) => {
     setCurrentQuestion(row.question)
     setCreateQueryModal(true)
   }
@@ -45,7 +49,7 @@ export default function DataTable() {
     setCreateQueryModal(false)
   }
 
-  const handleViewQuery = (row: any) => {
+  const handleViewQuery = (row: FormData) => {
     setCurrentQuestion(row.question)
     if (row.query) {
       setCurrentQuery({
