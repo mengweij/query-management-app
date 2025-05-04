@@ -1,13 +1,13 @@
-import { Query } from "./query";
+import { Query } from './query'
 
 export interface FormData {
-    id: string;
-    question: string;
-    answer: string;
-    query?: Query;
+  id: string
+  question: string
+  answer: string
+  query?: Query
 }
 
 export interface CreateFormDataDto {
-    question: string;
-    answer: string;
+  question: string
+  answer: string
 }

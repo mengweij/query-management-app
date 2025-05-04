@@ -6,5 +6,5 @@ export default function Home() {
       <h1>Query Management System</h1>
       <DataTable />
     </div>
-  );
+  )
 }
