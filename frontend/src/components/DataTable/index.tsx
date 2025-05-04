@@ -16,7 +16,6 @@ export default function DataTable() {
   const [createQueryModal, setCreateQueryModal] = useState(false)
   const [currentFormData, setCurrentFormData] = useState<FormData | null>(null)
   const [viewQueryModal, setViewQueryModal] = useState(false)
-  const [currentQuery, setCurrentQuery] = useState<any>(null)
 
   useEffect(() => {
     fetchFormData()
@@ -71,22 +70,26 @@ export default function DataTable() {
 
   const handleViewQuery = (row: FormData) => {
     setCurrentFormData(row)
-    if (row.query) {
-      setCurrentQuery({
-        status: row.query.status,
-        description: row.query.description || 'No description provided',
-        createdAt: row.query.createdAt,
-        updatedAt: row.query.updatedAt,
-      })
-      setViewQueryModal(true)
-    }
+    setViewQueryModal(true)
   }
 
-  const handleResolveQuery = () => {
-    // TODO: replace with API call
-    alert(`Resolved query for ${currentQuery?.title}`)
-    setViewQueryModal(false)
-    setCurrentQuery(null)
+  const handleResolveQuery = async () => {
+    if (!currentFormData?.query) {
+      console.error('Current form data has no query to resolve')
+      return
+    }
+
+    try {
+      await apiService.query.updateStatus(currentFormData.query.id, 'RESOLVED')
+      alert(`Resolved query for ${currentFormData?.question}`)
+      await fetchFormData()
+    } catch (error) {
+      console.error('Error resolving query:', error)
+      alert('Error resolving query')
+    } finally {
+      setViewQueryModal(false)
+      setCurrentFormData(null)
+    }
   }
 
   if (loading) {
@@ -135,20 +138,22 @@ export default function DataTable() {
         question={currentFormData?.question || ''}
         onSubmit={handleSubmit}
       />
-      <ViewQueryModal
-        opened={viewQueryModal}
-        onClose={() => {
-          setViewQueryModal(false)
-          setCurrentQuery(null)
-          setCurrentFormData(null)
-        }}
-        question={currentFormData?.question || ''}
-        status={currentQuery?.status}
-        description={currentQuery?.description}
-        createdAt={currentQuery?.createdAt}
-        updatedAt={currentQuery?.updatedAt}
-        onResolve={handleResolveQuery}
-      />
+
+      {currentFormData?.query && (
+        <ViewQueryModal
+          opened={viewQueryModal}
+          onClose={() => {
+            setViewQueryModal(false)
+            setCurrentFormData(null)
+          }}
+          question={currentFormData.question}
+          status={currentFormData.query.status}
+          description={currentFormData.query.description || ''}
+          createdAt={currentFormData.query.createdAt}
+          updatedAt={currentFormData.query.updatedAt}
+          onResolve={handleResolveQuery}
+        />
+      )}
     </>
   )
 }
