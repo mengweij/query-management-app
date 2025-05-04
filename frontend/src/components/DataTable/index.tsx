@@ -2,6 +2,8 @@
 
 import { Table } from '@mantine/core'
 import { useEffect, useState } from 'react'
+import { notifications } from '@mantine/notifications'
+import { IconX, IconCheck } from '@tabler/icons-react'
 
 import QueryCell from './queryCell'
 import CreateQueryModal from '../QueryModal/CreateQueryModal'
@@ -56,12 +58,22 @@ export default function DataTable() {
         formDataId: currentFormData.id,
       })
 
-      alert(`Created query for ${currentFormData?.question}`)
+      notifications.show({
+        title: 'Success!',
+        message: `Created query for ${currentFormData?.question}`,
+        icon: <IconCheck />,
+        color: 'green',
+      })
 
       await fetchFormData()
     } catch (error) {
       console.error('Error creating query:', error)
-      alert('Error creating query')
+      notifications.show({
+        title: 'Error!',
+        message: 'Error creating query',
+        icon: <IconX />,
+        color: 'red',
+      })
     } finally {
       setCreateQueryModal(false)
       setCurrentFormData(null)
@@ -81,11 +93,24 @@ export default function DataTable() {
 
     try {
       await apiService.query.updateStatus(currentFormData.query.id, 'RESOLVED')
-      alert(`Resolved query for ${currentFormData?.question}`)
+
+      notifications.show({
+        title: 'Success!',
+        message: `Resolved query for ${currentFormData?.question}`,
+        icon: <IconCheck />,
+        color: 'green',
+      })
+
       await fetchFormData()
     } catch (error) {
       console.error('Error resolving query:', error)
-      alert('Error resolving query')
+
+      notifications.show({
+        title: 'Error!',
+        message: 'Error resolving query',
+        icon: <IconX />,
+        color: 'red',
+      })
     } finally {
       setViewQueryModal(false)
       setCurrentFormData(null)
