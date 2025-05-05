@@ -1,12 +1,6 @@
 'use client'
 
-import {
-  Title,
-  Text,
-  Paper,
-  Center,
-  AppShell,
-} from '@mantine/core'
+import { Title, Text, Paper, Center, AppShell } from '@mantine/core'
 import DataTable from '../components/DataTable'
 
 export default function Home() {

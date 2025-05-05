@@ -11,11 +11,11 @@ const server: FastifyInstance = build({
 server.register(CORSConfig, {
   origin: [
     'https://vial-assignemnt-frontend.vercel.app', // Production
-    'http://localhost:3000' // Development
+    'http://localhost:3000', // Development
   ],
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'],
   allowedHeaders: ['Content-Type', 'Authorization'],
-  credentials: true
+  credentials: true,
 })
 
 server
