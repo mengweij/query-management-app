@@ -10,7 +10,9 @@
     "axios": "^1.9.0",
     "dayjs": "^1.11.13",
     "env-cmd": "^10.1.0",
-    "fastify": "^5.2.1"
+    "fastify": "^5.2.1",
+    "@types/node": "^18.19.70",
+    "typescript": "^5.7.2"
   },
   "name": "backend",
   "description": "## Introduction The purpose of this project is to simulate the back-end development work at Vial. It implements the main stack we use for our APIs.",
@@ -20,7 +22,6 @@
     "doc": "docs"
   },
   "devDependencies": {
-    "@types/node": "^18.19.70",
     "@typescript-eslint/eslint-plugin": "^5.57.0",
     "@typescript-eslint/parser": "^5.48.1",
     "eslint": "^8.36.0",
@@ -32,8 +33,7 @@
     "postcss-simple-vars": "^7.0.1",
     "prettier": "^2.8.7",
     "prisma": "^6.7.0",
-    "ts-node": "^10.9.1",
-    "typescript": "^5.7.2"
+    "ts-node": "^10.9.1"
   },
   "scripts": {
     "start": "node dist/index.js",
