@@ -44,7 +44,7 @@ export default function QueryCell({
   const isQueryOpen = status === 'OPEN'
   return (
     <Group wrap="nowrap" style={{ cursor: 'pointer' }} onClick={onViewQuery}>
-      <Tooltip label={'View Query'} withArrow>
+      <Tooltip label={'Manage Query'} withArrow>
         <ActionIcon
           color={isQueryOpen ? 'red' : 'green'}
           variant="light"

@@ -8,6 +8,7 @@ import { IconX, IconCheck } from '@tabler/icons-react'
 import QueryCell from './queryCell'
 import CreateQueryModal from '../QueryModal/CreateQueryModal'
 import ViewQueryModal from '../QueryModal/ViewQueryModal'
+import DeleteQueryModal from '../QueryModal/DeleteQueryModal'
 import apiService from '../../services/api.service'
 import { FormData } from '../../types/form_data'
 
@@ -18,6 +19,7 @@ export default function DataTable() {
   const [createQueryModal, setCreateQueryModal] = useState(false)
   const [currentFormData, setCurrentFormData] = useState<FormData | null>(null)
   const [viewQueryModal, setViewQueryModal] = useState(false)
+  const [deleteQueryModal, setDeleteQueryModal] = useState(false)
 
   useEffect(() => {
     fetchFormData()
@@ -117,6 +119,38 @@ export default function DataTable() {
     }
   }
 
+  const handleDelete = async () => {
+    if (!currentFormData?.query) {
+      console.error('Current form data has no query to delete')
+      return
+    }
+
+    try {
+      await apiService.query.delete(currentFormData.query.id)
+
+      notifications.show({
+        title: 'Success!',
+        message: `Deleted query for ${currentFormData?.question}`,
+        icon: <IconCheck />,
+        color: 'green',
+      })
+
+      await fetchFormData()
+    } catch (error) {
+      console.error('Error deleting query:', error)
+
+      notifications.show({
+        title: 'Error!',
+        message: 'Error deleting query',
+        icon: <IconX />,
+        color: 'red',
+      })
+    } finally {
+      setDeleteQueryModal(false)
+      setCurrentFormData(null)
+    }
+  }
+
   if (loading) {
     return <div>Loading...</div>
   }
@@ -181,8 +215,21 @@ export default function DataTable() {
           createdAt={currentFormData.query.createdAt}
           updatedAt={currentFormData.query.updatedAt}
           onResolve={handleResolveQuery}
+          onDelete={() => {
+            setViewQueryModal(false)
+            setDeleteQueryModal(true)
+          }}
         />
       )}
+
+      <DeleteQueryModal
+        opened={deleteQueryModal}
+        onClose={() => {
+          setDeleteQueryModal(false)
+          setCurrentFormData(null)
+        }}
+        onConfirm={handleDelete}
+      />
     </>
   )
 }

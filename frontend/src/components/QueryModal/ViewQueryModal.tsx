@@ -35,6 +35,7 @@ interface ViewQueryModalProps {
   createdAt: string
   updatedAt?: string
   onResolve?: () => void
+  onDelete?: () => void
 }
 
 export default function ViewQueryModal({
@@ -46,6 +47,7 @@ export default function ViewQueryModal({
   createdAt,
   updatedAt,
   onResolve,
+  onDelete,
 }: ViewQueryModalProps) {
   const isOpen = status === 'OPEN'
   const hasUpdatedAfterCreated = updatedAt !== createdAt
@@ -100,13 +102,16 @@ export default function ViewQueryModal({
           {description}
         </Text>
       </Box>
-      {isOpen && (
-        <Group justify="center" mt="md">
+      <Group justify="center" mt="md">
+        <Button color="red" variant="outline" onClick={onDelete}>
+          Delete
+        </Button>
+        {isOpen && (
           <Button color="green" onClick={onResolve}>
             Resolve
           </Button>
-        </Group>
-      )}
+        )}
+      </Group>
     </Modal>
   )
 }
