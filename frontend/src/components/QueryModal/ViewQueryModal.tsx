@@ -67,6 +67,7 @@ export default function ViewQueryModal({
         blur: 3,
       }}
     >
+      {/* section of query status and dates */}
       <Box mb="xs">
         <Group justify="flex-start">
           <Badge color={isOpen ? 'red' : 'green'} size="md">
@@ -87,7 +88,10 @@ export default function ViewQueryModal({
           </Text>
         </Group>
       </Box>
+
       <Divider my="sm" />
+
+      {/* section of query description */}
       <Box mb="md">
         <Text c="dimmed" size="sm" mb={2}>
           For Question
@@ -102,6 +106,8 @@ export default function ViewQueryModal({
           {description}
         </Text>
       </Box>
+
+      {/* section of query action buttons */}
       <Group justify="center" mt="md">
         <Button color="red" variant="outline" onClick={onDelete}>
           Delete

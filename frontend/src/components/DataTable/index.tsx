@@ -21,6 +21,7 @@ export default function DataTable() {
   const [viewQueryModal, setViewQueryModal] = useState(false)
   const [deleteQueryModal, setDeleteQueryModal] = useState(false)
 
+  // ----- For page load -----
   useEffect(() => {
     fetchFormData()
   }, [])
@@ -42,6 +43,11 @@ export default function DataTable() {
     }
   }
 
+  if (loading) {
+    return <div>Loading...</div>
+  }
+
+  // ----- Helpers to handle Create Query action -----
   const handleCreateQuery = (row: FormData) => {
     setCurrentFormData(row)
     setCreateQueryModal(true)
@@ -82,6 +88,7 @@ export default function DataTable() {
     }
   }
 
+  // ----- Helpers to handle View Query action -----
   const handleViewQuery = (row: FormData) => {
     setCurrentFormData(row)
     setViewQueryModal(true)
@@ -119,6 +126,7 @@ export default function DataTable() {
     }
   }
 
+  // ----- Helpers to handle Delete Query action -----
   const handleDelete = async () => {
     if (!currentFormData?.query) {
       console.error('Current form data has no query to delete')
@@ -151,12 +159,9 @@ export default function DataTable() {
     }
   }
 
-  if (loading) {
-    return <div>Loading...</div>
-  }
-
   return (
     <>
+      {/* Table to display form data */}
       <Table.ScrollContainer minWidth={600} maxHeight={'calc(90vh - 200px)'}>
         <Table highlightOnHover withTableBorder stickyHeader>
           <Table.Thead>
@@ -192,6 +197,8 @@ export default function DataTable() {
           </Table.Tbody>
         </Table>
       </Table.ScrollContainer>
+
+      {/* Modals for creating, viewing, and deleting queries */}
       <CreateQueryModal
         opened={createQueryModal}
         onClose={() => {
