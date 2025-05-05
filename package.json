@@ -30,7 +30,8 @@
     "build": "tsc",
     "dev": "nodemon src/index.ts",
     "migrate": "docker exec -it vial-backend-api npx prisma migrate deploy",
-    "seed": "docker exec -it vial-backend-api npx prisma db seed",
+    "seed:dev": "docker exec -it vial-backend-api npx prisma db seed",
+    "seed": "npx prisma db seed",
     "lint": "eslint src --ext .ts",
     "lint:fix": "eslint src --ext .ts --fix",
     "format": "prettier --write 'src/**/*.{ts,tsx,js,jsx,json,css,scss,md}' 'frontend/src/**/*.{ts,tsx,js,jsx,json,css,scss,md}'"
