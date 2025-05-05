@@ -15,6 +15,68 @@ interface UpdateQueryBody {
   status: Status
 }
 
+const querySchema = {
+  type: 'object',
+  properties: {
+    id: { type: 'string' },
+    title: { type: 'string' },
+    description: { type: 'string', nullable: true },
+    createdAt: { type: 'string', format: 'date-time' },
+    updatedAt: { type: 'string', format: 'date-time' },
+    status: { type: 'string', enum: ['OPEN', 'RESOLVED'] },
+    formDataId: { type: 'string' },
+  },
+}
+
+const createQueryBodySchema = {
+  type: 'object',
+  required: ['title', 'formDataId'],
+  properties: {
+    title: { type: 'string' },
+    description: { type: 'string', nullable: true },
+    formDataId: { type: 'string' },
+  },
+}
+
+const updateQueryBodySchema = {
+  type: 'object',
+  required: ['status'],
+  properties: {
+    status: { type: 'string', enum: ['OPEN', 'RESOLVED'] },
+  },
+}
+
+const errorSchema = {
+  type: 'object',
+  properties: {
+    statusCode: { type: 'number' },
+    message: { type: 'string' },
+  },
+}
+
+const successResponseSchema = {
+  type: 'object',
+  properties: {
+    statusCode: { type: 'number' },
+    data: querySchema,
+    message: { type: 'string' },
+  },
+}
+
+const deleteResponseSchema = {
+  type: 'object',
+  properties: {
+    statusCode: { type: 'number' },
+    data: {
+      type: 'object',
+      properties: {
+        message: { type: 'string' },
+      },
+    },
+    message: { type: 'string' },
+  },
+}
+
 async function queriesRoutes(app: FastifyInstance) {
   app.setReplySerializer(serializer)
 
@@ -23,6 +85,17 @@ async function queriesRoutes(app: FastifyInstance) {
   app.post<{
     Body: CreateQueryBody
   }>('', {
+    schema: {
+      tags: ['queries'],
+      summary: 'Create a new query',
+      description: 'Creates a new query related to form data',
+      body: createQueryBodySchema,
+      response: {
+        200: successResponseSchema,
+        400: errorSchema,
+        404: errorSchema,
+      },
+    },
     async handler(req, reply) {
       log.debug('create query')
       try {
@@ -54,6 +127,24 @@ async function queriesRoutes(app: FastifyInstance) {
     Params: { id: string }
     Body: UpdateQueryBody
   }>('/:id', {
+    schema: {
+      tags: ['queries'],
+      summary: 'Update a query',
+      description: 'Updates a query status by ID',
+      params: {
+        type: 'object',
+        required: ['id'],
+        properties: {
+          id: { type: 'string', description: 'Query ID' },
+        },
+      },
+      body: updateQueryBodySchema,
+      response: {
+        200: successResponseSchema,
+        400: errorSchema,
+        404: errorSchema,
+      },
+    },
     async handler(req, reply) {
       log.debug('update query')
       try {
@@ -78,6 +169,23 @@ async function queriesRoutes(app: FastifyInstance) {
   app.delete<{
     Params: { id: string }
   }>('/:id', {
+    schema: {
+      tags: ['queries'],
+      summary: 'Delete a query',
+      description: 'Deletes a query by ID',
+      params: {
+        type: 'object',
+        required: ['id'],
+        properties: {
+          id: { type: 'string', description: 'Query ID' },
+        },
+      },
+      response: {
+        200: deleteResponseSchema,
+        400: errorSchema,
+        404: errorSchema,
+      },
+    },
     async handler(req, reply) {
       log.debug('delete query')
       try {
