@@ -18,6 +18,6 @@
     "inlineSources": true,
     "strictNullChecks": true
   },
-  "include": ["**/*"],
+  "include": ["src/**/*"],
   "exclude": ["node_modules", "**/*.spec.ts"]
 }
