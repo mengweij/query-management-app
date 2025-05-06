@@ -35,7 +35,7 @@ export default function DataTable() {
         return
       }
       const { formData } = response.data
-      setFormData(formData)
+      setFormData(sortFormData(formData))
     } catch (error) {
       console.error('Error fetching form data:', error)
     } finally {
@@ -45,6 +45,33 @@ export default function DataTable() {
 
   if (loading) {
     return <div>Loading...</div>
+  }
+
+  // ----- Helpers to sort form data by query status -----
+  function sortFormData(formData: FormData[]) {
+    return formData.sort((a, b) => {
+      if (a.query && b.query) {
+        return sortFormDataByQueryStatus(a, b)
+      } else if (a.query) {
+        return -1
+      } else if (b.query) {
+        return 1
+      }
+      return 0
+    })
+  }
+
+  function sortFormDataByQueryStatus(a: FormData, b: FormData) {
+    if (!a.query || !b.query) {
+      return 0
+    }
+
+    if (a.query.status === 'OPEN' && b.query.status === 'RESOLVED') {
+      return -1
+    } else if (a.query.status === 'RESOLVED' && b.query.status === 'OPEN') {
+      return 1
+    }
+    return 0
   }
 
   // ----- Helpers to handle Create Query action -----
