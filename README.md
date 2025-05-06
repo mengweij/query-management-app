@@ -83,9 +83,4 @@ Backend will run on http://localhost:8080. Swagger API docs: http://localhost:80
 
 Frontend will run on http://localhost:3000.
 
----
-## 📝 License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
 
