@@ -1,7 +1,7 @@
 'use client'
 
 import { Table } from '@mantine/core'
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useCallback } from 'react'
 import { notifications } from '@mantine/notifications'
 import { IconX, IconCheck } from '@tabler/icons-react'
 
@@ -11,6 +11,33 @@ import ViewQueryModal from '../QueryModal/ViewQueryModal'
 import DeleteQueryModal from '../QueryModal/DeleteQueryModal'
 import apiService from '../../services/api.service'
 import { FormData } from '../../types/form_data'
+
+// ----- Helpers to sort form data by query status -----
+function sortFormData(formData: FormData[]) {
+  return formData.sort((a, b) => {
+    if (a.query && b.query) {
+      return sortFormDataByQueryStatus(a, b)
+    } else if (a.query) {
+      return -1
+    } else if (b.query) {
+      return 1
+    }
+    return 0
+  })
+}
+
+function sortFormDataByQueryStatus(a: FormData, b: FormData) {
+  if (!a.query || !b.query) {
+    return 0
+  }
+
+  if (a.query.status === 'OPEN' && b.query.status === 'RESOLVED') {
+    return -1
+  } else if (a.query.status === 'RESOLVED' && b.query.status === 'OPEN') {
+    return 1
+  }
+  return 0
+}
 
 export default function DataTable() {
   const [formData, setFormData] = useState<FormData[]>([])
@@ -22,11 +49,7 @@ export default function DataTable() {
   const [deleteQueryModal, setDeleteQueryModal] = useState(false)
 
   // ----- For page load -----
-  useEffect(() => {
-    fetchFormData()
-  }, [])
-
-  const fetchFormData = async () => {
+  const fetchFormData = useCallback(async () => {
     try {
       setLoading(true)
       const response = await apiService.formData.getAll()
@@ -41,37 +64,14 @@ export default function DataTable() {
     } finally {
       setLoading(false)
     }
-  }
+  }, [])
+
+  useEffect(() => {
+    fetchFormData()
+  }, [fetchFormData])
 
   if (loading) {
     return <div>Loading...</div>
-  }
-
-  // ----- Helpers to sort form data by query status -----
-  function sortFormData(formData: FormData[]) {
-    return formData.sort((a, b) => {
-      if (a.query && b.query) {
-        return sortFormDataByQueryStatus(a, b)
-      } else if (a.query) {
-        return -1
-      } else if (b.query) {
-        return 1
-      }
-      return 0
-    })
-  }
-
-  function sortFormDataByQueryStatus(a: FormData, b: FormData) {
-    if (!a.query || !b.query) {
-      return 0
-    }
-
-    if (a.query.status === 'OPEN' && b.query.status === 'RESOLVED') {
-      return -1
-    } else if (a.query.status === 'RESOLVED' && b.query.status === 'OPEN') {
-      return 1
-    }
-    return 0
   }
 
   // ----- Helpers to handle Create Query action -----
