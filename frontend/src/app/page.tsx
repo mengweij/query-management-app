@@ -9,7 +9,7 @@ export default function Home() {
       <AppShell.Header>
         <Center>
           <Title order={1} mt="xl" mb="xs">
-            Query Management System
+            Query Management App
           </Title>
         </Center>
         <Text c="dimmed" mb="md" ta={'center'}>
