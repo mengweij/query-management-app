@@ -5,7 +5,9 @@ A full-stack application that allows users to view and manage queries related to
 ### ✅ Features Implemented
 - Scrollable table view for all form submissions
 - Create, view, and delete queries via modal interface
-- Dynamic status tracking with color-coded labels and automatic row sorting
+- Dynamic status tracking with color-coded labels
+- Automatic row sorting by status
+- Pop-up notifications for user actions
 - RESTful API built with Fastify, Prisma ORM, and PostgreSQL
 - Integrated Swagger documentation for API reference
 - CORS support enabling secure cross-origin requests
