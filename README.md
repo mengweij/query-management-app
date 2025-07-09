@@ -15,11 +15,14 @@ A full-stack application that allows users to view and manage queries related to
 
 ## 🚀 Live Demo
 
-- **Frontend**: [https://vial-assignemnt-frontend.vercel.app](https://vial-assignemnt-frontend.vercel.app)
-- **Backend API**: [https://vial-assignment-backend.onrender.com](https://vial-assignment-backend.onrender.com)
-- **API Docs (Swagger)**: [https://vial-assignment-backend.onrender.com/docs](https://vial-assignment-backend.onrender.com/docs)
+- [**Frontend**](https://vial-assignemnt-frontend.vercel.app)
+- [**Backend API**](https://vial-assignment-backend.onrender.com)
+- [**API Docs (Swagger)**](https://vial-assignment-backend.onrender.com/docs)
 
-> Please note that the backend API may take a few seconds to wake up on Render.
+> Please note that the backend deployment may expire due to free hosting limitations. Watch the demo video below for a quick walkthrough of the app!
+
+## 📹 Demo Video
+[![Watch the video](https://www.youtube.com/watch?v=7J5qMV2wFvA/0.jpg)](https://youtu.be/7J5qMV2wFvA)
 
 ---
 
