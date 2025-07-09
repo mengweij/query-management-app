@@ -19,10 +19,14 @@ A full-stack application that allows users to view and manage queries related to
 - [**Backend API**](https://vial-assignment-backend.onrender.com)
 - [**API Docs (Swagger)**](https://vial-assignment-backend.onrender.com/docs)
 
-> Please note that the backend deployment may expire due to free hosting limitations. Watch the demo video below for a quick walkthrough of the app!
+> Please note that the backend deployment may expire due to free hosting limitations. GIFs below demonstrate the core features of the app.
 
-## 📹 Demo Video
-[![Watch the video](https://www.youtube.com/watch?v=7J5qMV2wFvA/0.jpg)](https://youtu.be/7J5qMV2wFvA)
+_Create Query_
+![Demo - create query](assets/create.gif)
+_Resolve Query_
+![Demo - resolve queries](assets/resolve.gif)
+_Delete Query_
+![Demo - delete query](assets/delete.gif)
 
 ---
 
